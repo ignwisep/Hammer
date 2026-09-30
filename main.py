@@ -2251,10 +2251,12 @@ class images(commands.Cog):
     @commands.command(aliases=['google','googleimg','gsearch'])
     async def gimage(self,ctx, *, query: str):
         await ctx.message.delete()
+        api_key = config.get('google_search_api_key', API_LOL)
+        cx = config.get('google_search_cx', CX_ID)
         url = 'https://www.googleapis.com/customsearch/v1'
         params = {
-            'key': API_LOL,
-            'cx': CX_ID,
+            'key': api_key,
+            'cx': cx,
             'q': query,
             'searchType': 'image',
             'num': 1
@@ -3132,28 +3134,39 @@ class nsfw(commands.Cog):
         self.bot = bot
 
     async def fetch_and_download_image(self, ctx, api_url, default_filename):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(api_url) as response:
-                if response.status == 200:
-                    json_data = await response.json()
-                    url = json_data.get("message") or json_data.get("url")
-                    if url:
-                        async with session.get(url) as image_response:
-                            if image_response.status == 200:
-                                content_type = image_response.headers.get('Content-Type', '')
-                                if "image" in content_type:
-                                    extension = content_type.split("/")[1]
-                                    filename = f"{default_filename}.{extension}"
-                                else:
-                                    filename = default_filename
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+        }
+        async with aiohttp.ClientSession(headers=headers) as session:
+            try:
+                async with session.get(api_url, timeout=aiohttp.ClientTimeout(total=15)) as response:
+                    if response.status == 200:
+                        json_data = await response.json()
+                        url = json_data.get("message") or json_data.get("url")
+                        if url:
+                            try:
+                                async with session.get(url, timeout=aiohttp.ClientTimeout(total=20)) as image_response:
+                                    if image_response.status == 200:
+                                        content_type = image_response.headers.get('Content-Type', '')
+                                        extension = content_type.split("/")[1] if "image" in content_type else "png"
+                                        if ";" in extension:
+                                            extension = extension.split(";")[0]
+                                        filename = f"{default_filename}.{extension}"
 
-                                image_data = await image_response.read()
-                                file = discord.File(io.BytesIO(image_data), filename=filename)
-                                try:
-                                    await ctx.channel.send(file=file)
-                                except:
-                                    new_url = f"[NSFW-IMAGE]({url})"
-                                    await send(ctx,".",new_url,image=url)
+                                        image_data = await image_response.read()
+                                        file = discord.File(io.BytesIO(image_data), filename=filename)
+                                        try:
+                                            await ctx.channel.send(file=file)
+                                            return
+                                        except Exception:
+                                            pass
+                            except Exception:
+                                pass
+                            await send(ctx, "NSFW", f"[Click here to view image]({url})", image=url)
+                    else:
+                        await senderror(ctx, "NSFW API Error", f"Endpoint returned status code `{response.status}`")
+            except Exception as e:
+                await senderror(ctx, "NSFW Error", f"Failed to fetch image: `{e}`")
 
     @commands.command()
     async def nsfw(self, ctx):

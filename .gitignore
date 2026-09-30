@@ -13,8 +13,17 @@ ENV/
 music_env/
 env.bak/
 venv.bak/
+# Sensitive User Data & Credentials
+config.json
+bot_config.json
+database/wallets.json
+used_boost_tokens.txt
 
-
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
 # Token Lists (Prevent accidental token leakage to public repo)
 
 # Local Server & Upload Storage
