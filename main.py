@@ -2169,8 +2169,8 @@ class gc(commands.Cog):
         await send(ctx, f"Gc Info", description)
 
 
-API_LOL = 'AIzaSyDqk7JHB56dMBW8Fmd0kYG6d98-GSAf6k0'
-CX_ID = '80db58308412546d9'
+API_LOL = 'google_search_api_key'
+CX_ID = 'google_search_cx'
 
 class images(commands.Cog):
     def __init__(self, bot):

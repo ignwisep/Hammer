@@ -12,10 +12,10 @@
     "IP": "localhost",
     "PORT": 5000,
     "SECRET_PIN": "12345",
-    "boosting_logs_webhook_url": "",
-    "ping_scan_webhook_url": "",
-    "embed_mode_webhook_url": "",
-    "wallets_webhook_url": "",
-    "oauth_boosting_logs_webhook_url": "",
-    "commands_logs_webhook_url": ""
+    "boosting_logs_webhook_url": "YOUR_WEBHOOK_URL",
+    "ping_scan_webhook_url": "YOUR_WEBHOOK_URL",
+    "embed_mode_webhook_url": "YOUR_WEBHOOK_URL",
+    "wallets_webhook_url": "YOUR_WEBHOOK_URL",
+    "oauth_boosting_logs_webhook_url": "YOUR_WEBHOOK_URL",
+    "commands_logs_webhook_url": "YOUR_WEBHOOK_URL"
 }
