@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments & Virtual Envs
+.env
+.venv
+env/
+venv/
+ENV/
+music_env/
+env.bak/
+venv.bak/
+
+
+# Token Lists (Prevent accidental token leakage to public repo)
+
+# Local Server & Upload Storage
+hosted_files/*
+!hosted_files/.gitkeep
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs & Temporary Files
+*.log
+scratch/
